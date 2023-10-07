@@ -28,7 +28,7 @@ export const login = async(req,res) => {
             id:user._id.toString(),
             email: user.email
         }, SECRET, {expiresIn:3600});
-        res.status(200).send(token);
+        res.status(200).send({token});
     }
     else{
         res.status(404).send('Invalid credentials');
