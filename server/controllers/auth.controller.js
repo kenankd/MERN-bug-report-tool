@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
-import {SALT_ROUNDS} from '../constants.js'
+import {SALT_ROUNDS,SECRET} from '../constants.js'
 import User from '../models/User.model.js'
 import { getUserByEmail } from '../dao/user.dao.js'
 
@@ -23,7 +24,11 @@ export const login = async(req,res) => {
         const user = await getUserByEmail(email);
         const match = bcrypt.compare(password,user.password);
     if(match){
-        res.status(200).send('Login successful');
+        const token = jwt.sign({
+            id:user._id.toString(),
+            email: user.email
+        }, SECRET, {expiresIn:3600});
+        res.status(200).send(token);
     }
     else{
         res.status(404).send('Invalid credentials');
