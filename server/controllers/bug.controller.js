@@ -1,5 +1,4 @@
 import Bug from '../models/Bug.model.js'
-import User from '../models/User.model.js'
 
 export const getAllBugs = async(req,res) => {
     try{
@@ -10,5 +9,14 @@ export const getAllBugs = async(req,res) => {
         res.status(500).send('Something went wrong!' + e);
 
     }
-    
+}
+
+export const createBug = async(req,res)=>{
+    try{
+        const bug = new Bug(req.body);
+        await bug.save();
+        res.status(200).send('Bug created');
+    } catch(e){
+        res.status(500).send('Something went wrong!');
+    }
 }
