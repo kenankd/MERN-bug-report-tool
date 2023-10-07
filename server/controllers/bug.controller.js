@@ -14,9 +14,21 @@ export const getAllBugs = async(req,res) => {
 export const createBug = async(req,res)=>{
     try{
         const bug = new Bug(req.body);
-        await bug.save();
-        res.status(200).send('Bug created');
+        const result = await bug.save();
+        res.status(200).send(result);
     } catch(e){
         res.status(500).send('Something went wrong!');
     }
+}
+
+export const changeStatus = async(req,res) => {
+    const {completed} = req.body;
+    const {id} = req.params;
+    try{
+        const result = await Bug.findOneAndUpdate({_id:id}, {completed: completed});
+        res.status(200).send("Succesfully changed status!");
+    } catch(e){
+        res.status(500).send("Something went wrong!");
+    }
+    
 }
