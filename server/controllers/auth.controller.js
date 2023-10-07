@@ -19,13 +19,17 @@ export const register = async (req,res) => {
 
 export const login = async(req,res) => {
     const {email,password} = req.body;
-    const user = await getUserByEmail(email);
-    console.log(user);
-    const match = await bcrypt.compare(password,user.password);
+    try {
+        const user = await getUserByEmail(email);
+        const match = bcrypt.compare(password,user.password);
     if(match){
         res.status(200).send('Login successful');
     }
     else{
         res.status(404).send('Invalid credentials');
     }
+    } catch (error) {
+        res.status(500).send('Something went wrong!');
+    }
+        
 }
