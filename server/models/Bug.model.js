@@ -9,8 +9,7 @@ const bugSchema = new Schema({
     completed:Boolean,
     timestamp: {
         type: Date,
-        default: new Date()
-    },
+        default: new Date()},
     severity:String
 });
 
