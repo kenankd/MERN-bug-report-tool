@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 
 import {SALT_ROUNDS} from '../constants.js'
 import User from '../models/User.model.js'
+import { getUserByEmail } from '../dao/user.dao.js'
 
 export const register = async (req,res) => {
     const{password,...data} = req.body;
@@ -16,6 +17,15 @@ export const register = async (req,res) => {
     }
 }
 
-export const login = (req,res) => {
-    res.status(201).send('login route');
+export const login = async(req,res) => {
+    const {email,password} = req.body;
+    const user = await getUserByEmail(email);
+    console.log(user);
+    const match = await bcrypt.compare(password,user.password);
+    if(match){
+        res.status(200).send('Login successful');
+    }
+    else{
+        res.status(404).send('Invalid credentials');
+    }
 }
