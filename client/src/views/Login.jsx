@@ -1,18 +1,21 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios'
 import {Card, CardContent, Box, CardActions, Button, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
-
+    const navigate = useNavigate();
     const login = async () => {
         try{
             const result = await axios.post('http://localhost:4000/auth/login',
             {email : email,password:password});
-            const {token} = result.data;
-            console.log(result)
-            localStorage.setItem('token',token);
+            if(result?.data && result?.status ===200){
+                const {token} = result.data;
+                localStorage.setItem('token',token);
+                navigate('/bugs-overview');
+            }
         } catch(e){
             console.log(e);
         }

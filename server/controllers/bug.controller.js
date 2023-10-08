@@ -3,12 +3,19 @@ import User from '../models/User.model.js'
 import {ROLES}  from '../constants.js';
 
 export const getAllBugs = async(req,res) => {
+    const {role,id} = req.user;
+    //assignedTo - developer
+    //reportedBy - qa
     try{
-       const bugs = await Bug.find();
-       res.status(201).send(bugs);
-    } catch(e){
+        let bugs = [];
+        if(role === ROLES.DEVELOPER)
+            bugs = await Bug.find({assignedTo : id})
+        else if(role === ROLES.QA)
+            bugs = await Bug.find({reportedBy : id})
+        res.status(201).send(bugs);
+    } catch (e){
         console.log(e);
-        res.status(500).send('Something went wrong!' + e);
+        res.status(500).send('Something went wrong!');
     }
 }
 
@@ -30,23 +37,5 @@ export const changeStatus = async(req,res) => {
         res.status(200).send("Succesfully changed status!");
     } catch(e){
         res.status(500).send("Something went wrong!");
-    }
-}
-
-export const getBugsByUserId = async(req,res) => {
-    const {userId} = req.params;
-    const {role} = req.user;
-    //assignedTo - developer
-    //reportedBy - qa
-    try{
-        let bugs = [];
-        if(role === ROLES.DEVELOPER)
-            bugs = await Bug.find({assignedTo : userId})
-        else if(role === ROLES.QA)
-            bugs = await Bug.find({reportedBy : userId})
-        res.status(201).send(bugs);
-    } catch (e){
-        console.log(e);
-        res.status(500).send('Something went wrong!');
     }
 }
