@@ -1,14 +1,16 @@
 import express from 'express';
+
 import { getAllBugs,createBug, changeStatus, getBugsByUserId } from '../controllers/bug.controller.js';
+import authMiddleware from '../middleware/auth.middleware.js'
 
 const router = express.Router();
 
-router.get('/',getAllBugs);
+router.get('/',authMiddleware,getAllBugs);
 
-router.post('/create',createBug);
+router.post('/create',authMiddleware,createBug);
 
-router.put('/:id/status',changeStatus);
+router.put('/:id/status',authMiddleware,changeStatus);
 
-router.get('/:userId',getBugsByUserId)
+router.get('/:userId',authMiddleware,getBugsByUserId)
 
 export default router;
