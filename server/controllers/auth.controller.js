@@ -26,7 +26,8 @@ export const login = async(req,res) => {
     if(match){
         const token = jwt.sign({
             id:user._id.toString(),
-            email: user.email
+            email: user.email,
+            role: user.role
         }, SECRET, {expiresIn:3600});
         res.status(200).send({token});
     }

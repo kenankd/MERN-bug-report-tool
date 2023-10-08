@@ -1,5 +1,6 @@
 import Bug from '../models/Bug.model.js'
 import User from '../models/User.model.js'
+import {ROLES}  from '../constants.js';
 
 export const getAllBugs = async(req,res) => {
     try{
@@ -41,12 +42,11 @@ export const getBugsByUserId = async(req,res) => {
     try{
         const user = await User.findById(userId);
         let bugs = [];
-        if(user.role === "developer")
+        if(user.role === ROLES.DEVELOPER)
             bugs = await Bug.find({assignedTo : userId})
-        else
+        else if(user.role === ROLES.QA)
             bugs = await Bug.find({reportedBy : userId})
         res.status(201).send(bugs);
-        
     } catch (e){
         console.log(e);
         res.status(500).send('Something went wrong!');
