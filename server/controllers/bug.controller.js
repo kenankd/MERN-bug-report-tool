@@ -9,7 +9,6 @@ export const getAllBugs = async(req,res) => {
     } catch(e){
         console.log(e);
         res.status(500).send('Something went wrong!' + e);
-
     }
 }
 
@@ -36,15 +35,14 @@ export const changeStatus = async(req,res) => {
 
 export const getBugsByUserId = async(req,res) => {
     const {userId} = req.params;
+    const {role} = req.user;
     //assignedTo - developer
     //reportedBy - qa
-
     try{
-        const user = await User.findById(userId);
         let bugs = [];
-        if(user.role === ROLES.DEVELOPER)
+        if(role === ROLES.DEVELOPER)
             bugs = await Bug.find({assignedTo : userId})
-        else if(user.role === ROLES.QA)
+        else if(role === ROLES.QA)
             bugs = await Bug.find({reportedBy : userId})
         res.status(201).send(bugs);
     } catch (e){
