@@ -1,9 +1,17 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
+import axios from 'axios'
 import {Card, CardContent, Box, CardActions, Button, TextField } from '@mui/material';
 
 const Login = () => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
+
+    const login = async () => {
+        const result = await axios.post('http://localhost:4000/auth/login',
+        {email : email,password:password});
+        console.log(result);
+    }
+
     return (
         <Box sx={{
             width: "100%",
@@ -12,7 +20,7 @@ const Login = () => {
             justifyContent: "center",
             alignItems: "center"
         }}>
-            <Card sx={{ maxWidth: "500px", width:"100%", border: "1px solid black" }}>
+            <Card sx={{ maxWidth: "400px", width:"100%", border: "1px solid black" }}>
                 <CardContent>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField id="email" label="Email" variant="outlined" fullWidth value={email}
@@ -24,7 +32,7 @@ const Login = () => {
                     </Box>
                 </CardContent>
                 <CardActions sx={{ justifyContent: "center" }}>
-                    <Button size="small">Log in</Button>
+                    <Button size="small" onClick={login}>Log in</Button>
                 </CardActions>
             </Card>
         </Box>
