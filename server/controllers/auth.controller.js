@@ -22,7 +22,7 @@ export const login = async(req,res) => {
     const {email,password} = req.body;
     try {
         const user = await getUserByEmail(email);
-        const match = bcrypt.compare(password,user.password);
+        const match = await bcrypt.compare(password,user.password);
     if(match){
         const token = jwt.sign({
             id:user._id.toString(),
@@ -32,7 +32,7 @@ export const login = async(req,res) => {
         res.status(200).send({token});
     }
     else{
-        res.status(404).send('Invalid credentials');
+        res.status(401).send('Invalid credentials');
     }
     } catch (error) {
         res.status(500).send('Something went wrong!');

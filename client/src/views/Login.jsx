@@ -7,9 +7,15 @@ const Login = () => {
     const [password,setPassword] = useState('');
 
     const login = async () => {
-        const result = await axios.post('http://localhost:4000/auth/login',
-        {email : email,password:password});
-        console.log(result);
+        try{
+            const result = await axios.post('http://localhost:4000/auth/login',
+            {email : email,password:password});
+            const {token} = result.data;
+            console.log(result)
+            localStorage.setItem('token',token);
+        } catch(e){
+            console.log(e);
+        }
     }
 
     return (
